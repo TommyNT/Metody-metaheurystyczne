@@ -1,39 +1,52 @@
-var offers = [];
-offers[0] = [710 , 20, 35.5];
-offers[1] = [666 , 15, 44.4];
-offers[2] = [555 , 15, 55.5];
-offers[3] = [444 , 14, 31.71429];
-offers[4] = [315 , 10, 31.5];
-offers[5] = [772 , 30, 25.73333];
-offers[6] = [777 , 25, 31.08];
-offers[7] = [250 , 4, 62.5];
-offers[8] = [250 , 10, 25];
-offers[9] = [400 , 5, 80];
-offers[10] = [345 , 10, 34.5];
+let offers = [
+    {n: 1, price: 710, days: 20, incomePerDay: 0},
+    {n: 2, price: 666, days: 15, incomePerDay: 0},
+    {n: 3, price: 555, days: 10, incomePerDay: 0},
+    {n: 4, price: 444, days: 14, incomePerDay: 0},
+    {n: 5, price: 315, days: 10, incomePerDay: 0},
+    {n: 6, price: 772, days: 30, incomePerDay: 0},
+    {n: 7, price: 777, days: 25, incomePerDay: 0},
+    {n: 8, price: 250, days: 4, incomePerDay: 0},
+    {n: 9, price: 250, days: 10, incomePerDay: 0},
+    {n: 10, price: 400, days: 5, incomePerDay: 0},
+    {n: 11, price: 345, days: 10, incomePerDay: 0}
+]
+ 
+let maxDays = 31,
+    days = 0,
+    acceptedOffers = [];
+   
+for (let i = 0; i < offers.length; i++) {
+    offers[i].incomePerDay = offers[i].price / offers[i].days;
+}
+ 
+offers.sort((a, b) => {
+    return a.incomePerDay == b.incomePerDay ? 0 : (a.incomePerDay < b.incomePerDay ? 1 : -1)
+})
+ 
+for (let i = 0; i < offers.length; i++) {
+    if (days + offers[i].days <= maxDays) {
+        days += offers[i].days;
+        acceptedOffers.push(offers[i]);
+    }
+}
+ 
+console.log(offers);
+console.log(acceptedOffers);
+console.log(days);
 
-var maxDays = 31;
-var average = [];
-
-offers.forEach(function(el) {
-	average.push(el[2]);
-});
-
-var sortedAverages = average.sort(function(a, b){return b-a});
-
-var days = [];
-
-offers.forEach(function(el) {
-	days.push(el[1]);
-});
-
-var takeOffer = [];
-var busyDays = 0;
-for (i = 0; i < offers.length; i++) { 
-	if(days[i] + busyDays <= maxDays){
-		takeOffer.push(offers[i]);
-		busyDays = busyDays + days[i];
-	}
+var accepted = [];
+for (var i = 0; i < acceptedOffers.length; i++) {
+    accepted.push('<span>' + acceptedOffers[i].n + '</span>');
 }
 
-console.log(takeOffer);
-console.log(busyDays);
+$(function(){
+		$( ".check" ).click(function() {
+		  $("#acceptedOffers").css("display","inline");
+		  $("#busyDays").css("display","inline");
+		});
+		$( "#acceptedOffers" ).html("Najkorzystniejsze oferty: " + "<strong>" + accepted.join(", ") + "</strong>" + "<br>");
+		$( "#busyDays" ).html("Ilość dni: " + "<strong>" + days + "<strong>" + "<br> <br>");
+});
+
+
